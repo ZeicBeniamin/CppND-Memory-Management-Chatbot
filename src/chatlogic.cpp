@@ -16,6 +16,7 @@ ChatLogic::ChatLogic()
 {
     //// STUDENT CODE
     ////
+    std::cout << "ChatLogic Constructor\n";
 
     // create instance of chatbot
     _chatBot = new ChatBot("../images/chatbot.png");
@@ -31,13 +32,16 @@ ChatLogic::~ChatLogic()
 {
     //// STUDENT CODE
     ////
+    std::cout << "ChatLogic Destructor\n";
 
-    // delete chatbot instance
-    delete _chatBot;
+    // Before deleting the chatbot instance, we must assure that anyone that 
+    // has ownership of `_chatBot` nullifies the resource.
+    // ChatBot instance will be deleted by th enode that holds it
 
     // delete all nodes
     for (auto it = std::begin(_nodes); it != std::end(_nodes); ++it)
     {
+        // std::cout << "Error happens here \n";
         delete *it;
     }
 
@@ -46,7 +50,7 @@ ChatLogic::~ChatLogic()
     {
         delete *it;
     }
-
+    
     ////
     //// EOF STUDENT CODE
 }

@@ -32,14 +32,19 @@ ChatBot::ChatBot(std::string filename)
 
 ChatBot::~ChatBot()
 {
-    std::cout << "ChatBot Destructor" << std::endl;
+    std::cout << "ChatBot Destructor1" << std::endl;
+    // std::cout << "ChatBot Destructor2" << std::endl;
+
 
     // deallocate heap memory
     if(_image != NULL) // Attention: wxWidgets used NULL and not nullptr
     {
+        std::cout << "Attempt image deletion\n";
         delete _image;
         _image = NULL;
     }
+
+    std::cout << "ChatBot Destructor, leaving ...\n";
 }
 
 //// STUDENT CODE
