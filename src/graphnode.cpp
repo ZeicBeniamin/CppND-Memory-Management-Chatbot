@@ -14,13 +14,15 @@ GraphNode::~GraphNode()
     ////
     std::cout << "GraphNode Destructor\n";
 
-    // Check if the current node handles any ChatBot object
-    if (_chatBot != nullptr) {
-        // std::cout << "Attempting ChatBot deletion\n";
-        delete _chatBot;
-        // std::cout << "Attempting ChatBot invalidation\n";
-        _chatBot = nullptr;
-    }
+    /// MODIFIED - _chatBot is an object, not a pointer and the node to which
+    /// it belongs will handle its lifetime.
+    // // Check if the current node handles any ChatBot object
+    // if (_chatBot != nullptr) {
+    //     // std::cout << "Attempting ChatBot deletion\n";
+    //     delete _chatBot;
+    //     // std::cout << "Attempting ChatBot invalidation\n";
+    //     _chatBot = nullptr;
+    // }
 
     // std::cout << "GraphNode Destructor, leaving ...\n";
 
@@ -46,17 +48,24 @@ void GraphNode::AddEdgeToChildNode(std::unique_ptr<GraphEdge> edge)
 
 //// STUDENT CODE
 ////
-void GraphNode::MoveChatbotHere(ChatBot *chatbot)
+void GraphNode::MoveChatbotHere(ChatBot chatbot)
 {
-    _chatBot = chatbot;
+    _chatBot = std::move(chatbot);
+
     // The change is made visible in both places
-    _chatBot->SetCurrentNode(this);
+    /// Since chatBot has been moved, the pointer to it must be updated
+    /// in chatLogic
+    _chatBot.UpdateChatBotInChatLogic();
+    _chatBot.SetCurrentNode(this);
 }
 
 void GraphNode::MoveChatbotToNewNode(GraphNode *newNode)
 {  
-    newNode->MoveChatbotHere(_chatBot);
-    _chatBot = nullptr; // invalidate pointer at source
+    newNode->MoveChatbotHere(std::move(_chatBot));
+    /// COMMENTED OUT - chatBot is no longer a pointer
+    /// Its lifetime will be handled by the node wich contains it
+    /// Resources will be invalidated at move
+    // _chatBot = nullptr; // invalidate pointer at source
 }
 ////
 //// EOF STUDENT CODE

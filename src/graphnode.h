@@ -25,7 +25,8 @@ private:
     /// NO NEED TO MODIFY - parent edges were not owned by this class; 
     /// they will remain stored as a vector of edges
     std::vector<GraphEdge *> _parentEdges; // edges to preceding nodes 
-    ChatBot *_chatBot = nullptr;
+    /// MODIFIED - _chatBot became object, not raw pointer
+    ChatBot _chatBot;
 
     ////
     //// EOF STUDENT CODE
@@ -55,7 +56,8 @@ public:
     //// STUDENT CODE
     ////
 
-    void MoveChatbotHere(ChatBot *chatbot);
+    /// MODIFIED - chatBot became object, not raw pointer
+    void MoveChatbotHere(ChatBot chatbot);
 
     ////
     //// EOF STUDENT CODE

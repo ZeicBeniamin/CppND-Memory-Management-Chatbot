@@ -32,7 +32,7 @@ ChatBot::ChatBot(std::string filename)
 
 ChatBot::~ChatBot()
 {
-    std::cout << "ChatBot Destructor1" << std::endl;
+    printf("ChatBot Destructor1 %p\n", this);
     // std::cout << "ChatBot Destructor2" << std::endl;
 
     // deallocate heap memory
@@ -62,10 +62,10 @@ ChatBot::ChatBot(ChatBot &source)
     std::cout << "ChatBot copy constructor\n";
     // Copy all the pointers from the previous `chatBot`
     _image = source._image;
-    _currentNode = source._currentNode;
+    // _currentNode = source._currentNode;
     _rootNode = source._rootNode;
     _chatLogic = source._chatLogic;
-    // Invalidate all the pointers of the previos `chatBot`
+    // // Invalidate all the pointers of the previos `chatBot`
     source._image = nullptr;
     source._currentNode = nullptr;
     source._rootNode = nullptr;
@@ -83,7 +83,7 @@ ChatBot &ChatBot::operator=(ChatBot &source)
         delete _image;
     // Copy all the pointers from the previous `chatBot`
     _image = source._image;
-    _currentNode = source._currentNode;
+    // _currentNode = source._currentNode;
     _rootNode = source._rootNode;
     _chatLogic = source._chatLogic;
     // Invalidate all the pointers to various resources
@@ -100,7 +100,7 @@ ChatBot::ChatBot(ChatBot &&source)
     // Copy image's pointer from previous `chatBot`
     _image = source._image;
     // Copy all the pointers from the previous `chatBot`
-    _currentNode = source._currentNode;
+    // _currentNode = source._currentNode;
     _rootNode = source._rootNode;
     _chatLogic = source._chatLogic;
     // Invalidate all the pointers to various resources
@@ -122,7 +122,7 @@ ChatBot &ChatBot::operator=(ChatBot &&source)
         delete _image;
     // Steal resources from the temporary object
     _image = source._image;
-    _currentNode = source._currentNode;
+    // _currentNode = source._currentNode;
     _rootNode = source._rootNode;
     _chatLogic = source._chatLogic;
     // Invalidate pointers
@@ -133,6 +133,11 @@ ChatBot &ChatBot::operator=(ChatBot &&source)
 
     return *this;
 }
+
+void ChatBot::UpdateChatBotInChatLogic() {
+    this -> _chatLogic -> SetChatbotHandle(this);
+}
+
 
 ////
 //// EOF STUDENT CODE
@@ -175,6 +180,7 @@ void ChatBot::SetCurrentNode(GraphNode *node)
 {
     // update pointer to current node
     _currentNode = node;
+    // std::cout << "Does the code reach this point?\n";
 
     // select a random node answer (if several answers should exist)
     std::vector<std::string> answers = _currentNode->GetAnswers();
@@ -182,8 +188,13 @@ void ChatBot::SetCurrentNode(GraphNode *node)
     std::uniform_int_distribution<int> dis(0, answers.size() - 1);
     std::string answer = answers.at(dis(generator));
 
+    // std::cout << "Does the code reach this point?\n";
+
+    // std::cout << "answer is " << answer << "\n";
+    /// HERE lies the error
     // send selected node answer to user
     _chatLogic->SendMessageToUser(answer);
+
 }
 
 int ChatBot::ComputeLevenshteinDistance(std::string s1, std::string s2)
