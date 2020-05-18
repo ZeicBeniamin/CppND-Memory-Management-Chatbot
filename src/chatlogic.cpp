@@ -45,10 +45,11 @@ ChatLogic::~ChatLogic()
     // }
 
     // delete all edges
-    for (auto it = std::begin(_edges); it != std::end(_edges); ++it)
-    {
-        delete *it;
-    }
+    /// DELETED - Edges will be managed by GraphNodes
+    // for (auto it = std::begin(_edges); it != std::end(_edges); ++it)
+    // {
+    //     delete *it;
+    // }
 
     ////
     //// EOF STUDENT CODE
@@ -169,21 +170,27 @@ void ChatLogic::LoadAnswerGraphFromFile(std::string filename)
                             auto childNode = std::find_if(_nodes.begin(), _nodes.end(), [&childToken](std::unique_ptr<GraphNode> &node) { return node->GetID() == std::stoi(childToken->second); });
 
                             // create new edge
+                            /// MODIFIED - unique_ptr of GraphEdge instead of raw pointer to GraphEdge
+                            std::unique_ptr<GraphEdge> edge = std::make_unique<GraphEdge>(id);
                             /// MODIFIED - the * operator only returns the unique_ptr
                             /// so, we apply `(*childNode).get()` to get a pointer to the object managed by unique_ptr
-                            GraphEdge *edge = new GraphEdge(id);
                             edge->SetChildNode((*childNode).get());
                             edge->SetParentNode((*parentNode).get());
-                            _edges.push_back(edge);
+                            /// MODIFIED - passed a raw pointer to the edge, because this class will
+                            /// no longer own the edges
+                            _edges.push_back(edge.get());
 
                             // find all keywords for current node
+                            /// NO NEED TO MODIFY - dereferencing unique_ptr is the same as dereferencing raw pointer 
                             AddAllTokensToElement("KEYWORD", tokens, *edge);
 
                             // store reference in child node and parent node
                             /// MODIFIED - called the `get` method on the dereferenced iterator, to get the adress of the node 
                             /// stored in the unique_ptr
-                            (*childNode).get()->AddEdgeToParentNode(edge);
-                            (*parentNode).get()->AddEdgeToChildNode(edge);
+                            /// MODIFIED - called `get` to get pointer to GraphEdge managed by unique_ptr
+                            (*childNode).get()->AddEdgeToParentNode(edge.get());
+                            /// MODIFIED - moved the edge to the parent node that will own the edge from now on
+                            (*parentNode).get()->AddEdgeToChildNode(std::move(edge));
                         }
 
                         ////
