@@ -15,6 +15,8 @@ string
 /home/phantomcoder/Desktop/cpp_nanodegree/CppND-Memory-Management-Chatbot/src/chatgui.h
 wx/wx.h
 -
+memory
+-
 
 /home/phantomcoder/Desktop/cpp_nanodegree/CppND-Memory-Management-Chatbot/src/chatlogic.cpp
 fstream
@@ -45,6 +47,8 @@ vector
 -
 string
 -
+memory
+-
 chatgui.h
 /home/phantomcoder/Desktop/cpp_nanodegree/CppND-Memory-Management-Chatbot/src/chatgui.h
 
@@ -52,14 +56,6 @@ chatgui.h
 vector
 -
 string
--
-
-/home/phantomcoder/Desktop/cpp_nanodegree/CppND-Memory-Management-Chatbot/src/graphnode.cpp
-graphedge.h
-/home/phantomcoder/Desktop/cpp_nanodegree/CppND-Memory-Management-Chatbot/src/graphedge.h
-graphnode.h
-/home/phantomcoder/Desktop/cpp_nanodegree/CppND-Memory-Management-Chatbot/src/graphnode.h
-iostream
 -
 
 /home/phantomcoder/Desktop/cpp_nanodegree/CppND-Memory-Management-Chatbot/src/graphnode.h

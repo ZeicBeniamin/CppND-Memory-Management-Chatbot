@@ -21,7 +21,7 @@ ChatBot::ChatBot()
 ChatBot::ChatBot(std::string filename)
 {
     std::cout << "ChatBot Constructor" << std::endl;
-    
+
     // invalidate data handles
     _chatLogic = nullptr;
     _rootNode = nullptr;
@@ -35,9 +35,8 @@ ChatBot::~ChatBot()
     std::cout << "ChatBot Destructor1" << std::endl;
     // std::cout << "ChatBot Destructor2" << std::endl;
 
-
     // deallocate heap memory
-    if(_image != NULL) // Attention: wxWidgets used NULL and not nullptr
+    if (_image != NULL) // Attention: wxWidgets used NULL and not nullptr
     {
         std::cout << "Attempt image deletion\n";
         delete _image;
@@ -49,6 +48,91 @@ ChatBot::~ChatBot()
 
 //// STUDENT CODE
 ////
+
+// Exclusive ownership policy.
+// That means:
+// - copy constructor invalidates old object's resource handlers
+// - copy assignment operator does the same, but also returns pointer to new obj
+// - move constructor invalidates old object's resource handlers
+// - move assignment operator invalidates and returns pointer to object
+
+// Copy constructor - exclusive ownership
+ChatBot::ChatBot(ChatBot &source)
+{
+    std::cout << "ChatBot copy constructor\n";
+    // Copy all the pointers from the previous `chatBot`
+    _image = source._image;
+    _currentNode = source._currentNode;
+    _rootNode = source._rootNode;
+    _chatLogic = source._chatLogic;
+    // Invalidate all the pointers of the previos `chatBot`
+    source._image = nullptr;
+    source._currentNode = nullptr;
+    source._rootNode = nullptr;
+    source._chatLogic = nullptr;
+}
+// Copy assignment operator - exclusive ownership
+ChatBot &ChatBot::operator=(ChatBot &source)
+{
+    std::cout << "ChatBot copy assignment operator\n";
+    // Deallocate the image of the current `chatBot`
+    // Check for self assignment
+    if (&source == this)
+        return *this;
+    if (_image != nullptr)
+        delete _image;
+    // Copy all the pointers from the previous `chatBot`
+    _image = source._image;
+    _currentNode = source._currentNode;
+    _rootNode = source._rootNode;
+    _chatLogic = source._chatLogic;
+    // Invalidate all the pointers to various resources
+    source._image = nullptr;
+    source._currentNode = nullptr;
+    source._rootNode = nullptr;
+    source._chatLogic = nullptr;
+    return *this;
+}
+// Move constructor - exclusive ownership
+ChatBot::ChatBot(ChatBot &&source)
+{
+    std::cout << "ChatBot move constructor\n";    
+    // Copy image's pointer from previous `chatBot`
+    _image = source._image;
+    // Copy all the pointers from the previous `chatBot`
+    _currentNode = source._currentNode;
+    _rootNode = source._rootNode;
+    _chatLogic = source._chatLogic;
+    // Invalidate all the pointers to various resources
+    source._image = nullptr;
+    source._currentNode = nullptr;
+    source._rootNode = nullptr;
+    source._chatLogic = nullptr;
+}
+// Move assignment operator
+ChatBot &ChatBot::operator=(ChatBot &&source)
+{
+    // Must steal the rvalue's resources
+    std::cout << "ChatBot move assignment operator\n";
+    // Check for self assignment
+    if (&source == this)
+        return *this;
+    // Deallocate the image from the current object
+    if (_image != nullptr)
+        delete _image;
+    // Steal resources from the temporary object
+    _image = source._image;
+    _currentNode = source._currentNode;
+    _rootNode = source._rootNode;
+    _chatLogic = source._chatLogic;
+    // Invalidate pointers
+    source._image = nullptr;
+    source._currentNode = nullptr;
+    source._rootNode = nullptr;
+    source._chatLogic = nullptr;
+
+    return *this;
+}
 
 ////
 //// EOF STUDENT CODE
