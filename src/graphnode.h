@@ -13,9 +13,6 @@ class GraphEdge;
 class GraphNode
 {
 private:
-    //// STUDENT CODE
-    ////
-
     // data handles (owned)
     /// MODIFIED - vector of *GraphEdge into vector of unique_ptr holding GraphEdge objects
     std::vector<std::unique_ptr<GraphEdge>> _childEdges;
@@ -27,9 +24,6 @@ private:
     std::vector<GraphEdge *> _parentEdges; // edges to preceding nodes 
     /// MODIFIED - _chatBot became object, not raw pointer
     ChatBot _chatBot;
-
-    ////
-    //// EOF STUDENT CODE
 
     // proprietary members
     int _id;
@@ -53,14 +47,8 @@ public:
     /// MODIFIED - receive a unique_ptr as parameter, instead of raw pointer
     void AddEdgeToChildNode(std::unique_ptr<GraphEdge> edge);
 
-    //// STUDENT CODE
-    ////
-
     /// MODIFIED - chatBot became object, not raw pointer
     void MoveChatbotHere(ChatBot chatbot);
-
-    ////
-    //// EOF STUDENT CODE
 
     void MoveChatbotToNewNode(GraphNode *newNode);
 };

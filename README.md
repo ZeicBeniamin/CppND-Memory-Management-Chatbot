@@ -1,3 +1,6 @@
+#### Brief note on this project
+This project is part of the C++ Nanodegree (offered by Udacity). The initial project has already been implemented, but it had no memory optimization (i.e. no use of smart pointers or move semantics). The goal was to optimize memory management according to the tasks described below.
+Following is the original README, that came with the project:
 # CPPND: Memory Management Chatbot
 
 This is the project for the third course in the [Udacity C++ Nanodegree Program](https://www.udacity.com/course/c-plus-plus-nanodegree--nd213): Memory Management.

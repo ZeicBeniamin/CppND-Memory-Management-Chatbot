@@ -1,3 +1,0 @@
-/home/phantomcoder/Desktop/cpp_nanodegree/CppND-Memory-Management-Chatbot/build/CMakeFiles/rebuild_cache.dir
-/home/phantomcoder/Desktop/cpp_nanodegree/CppND-Memory-Management-Chatbot/build/CMakeFiles/membot.dir
-/home/phantomcoder/Desktop/cpp_nanodegree/CppND-Memory-Management-Chatbot/build/CMakeFiles/edit_cache.dir

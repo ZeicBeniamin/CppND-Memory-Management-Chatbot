@@ -13,47 +13,12 @@
 
 ChatLogic::ChatLogic()
 {
-    //// STUDENT CODE
-    ////
     std::cout << "ChatLogic Constructor\n";
-
-    std::cout << "ChatBot created here\n";
-    // create instance of chatbot
-    _chatBot = new ChatBot("../images/chatbot.png");
-
-    // add pointer to chatlogic so that chatbot answers can be passed on to the GUI
-    _chatBot->SetChatLogicHandle(this);
-
-    ////
-    //// EOF STUDENT CODE
 }
 
 ChatLogic::~ChatLogic()
 {
-    //// STUDENT CODE
-    ////
     std::cout << "ChatLogic Destructor\n";
-
-    // Before deleting the chatbot instance, we must assure that anyone that
-    // has ownership of `_chatBot` nullifies the resource.
-    // ChatBot instance will be deleted by th enode that holds it
-
-    // // Nodes are managed by unique_ptr, so they need not to be deleted manually
-    // for (auto it = std::begin(_nodes); it != std::end(_nodes); ++it)
-    // {
-    //     // std::cout << "Error happens here \n";
-    //     delete *it;
-    // }
-
-    // delete all edges
-    /// DELETED - Edges will be managed by GraphNodes
-    // for (auto it = std::begin(_edges); it != std::end(_edges); ++it)
-    // {
-    //     delete *it;
-    // }
-
-    ////
-    //// EOF STUDENT CODE
 }
 
 template <typename T>
@@ -128,10 +93,7 @@ void ChatLogic::LoadAnswerGraphFromFile(std::string filename)
                     // node-based processing
                     if (type->second == "NODE")
                     {
-                        //// STUDENT CODE
-                        ////
 
-                        // check if node with this ID exists already
                         /// MODIFIED - returns a unique_ptr that manages a Node object
                         auto newNode = std::find_if(_nodes.begin(), _nodes.end(), [&id](std::unique_ptr<GraphNode> &node) { return node->GetID() == id; });
 
@@ -142,24 +104,15 @@ void ChatLogic::LoadAnswerGraphFromFile(std::string filename)
                             _nodes.emplace_back(std::make_unique<GraphNode>(id));
                             newNode = _nodes.end() - 1; // get iterator to last element
 
-                            // add all answers to current node
-                            /// NO NEED TO MODIFY - double dereferencing means accesing the unique_ptr inside the iterator;
-                            /// this returns the GraphNode object
+                            /// NO NEED TO MODIFY - double dereferencing means accesing the unique_ptr inside the iterator
+                            /// This returns the GraphNode object
                             AddAllTokensToElement("ANSWER", tokens, **newNode);
                         }
-
-                        ////
-                        //// EOF STUDENT CODE
                     }
 
                     // edge-based processing
                     if (type->second == "EDGE")
                     {
-                        //// STUDENT CODE
-                        ////
-
-                        // find tokens for incoming (parent) and outgoing (child) node
-                        /// `find_if` returns iterators
                         auto parentToken = std::find_if(tokens.begin(), tokens.end(), [](const std::pair<std::string, std::string> &pair) { return pair.first == "PARENT"; });
                         auto childToken = std::find_if(tokens.begin(), tokens.end(), [](const std::pair<std::string, std::string> &pair) { return pair.first == "CHILD"; });
 
@@ -177,25 +130,20 @@ void ChatLogic::LoadAnswerGraphFromFile(std::string filename)
                             /// so, we apply `(*childNode).get()` to get a pointer to the object managed by unique_ptr
                             edge->SetChildNode((*childNode).get());
                             edge->SetParentNode((*parentNode).get());
-                            /// MODIFIED - passed a raw pointer to the edge, because this class will
-                            /// no longer own the edges
-                            _edges.push_back(edge.get());
+                            /// DELETED
 
                             // find all keywords for current node
-                            /// NO NEED TO MODIFY - dereferencing unique_ptr is the same as dereferencing raw pointer 
+                            /// NO NEED TO MODIFY - dereferencing unique_ptr is the same as dereferencing raw pointer
                             AddAllTokensToElement("KEYWORD", tokens, *edge);
 
                             // store reference in child node and parent node
-                            /// MODIFIED - called the `get` method on the dereferenced iterator, to get the adress of the node 
+                            /// MODIFIED - called the `get` method on the dereferenced iterator, to get the adress of the node
                             /// stored in the unique_ptr
                             /// MODIFIED - called `get` to get pointer to GraphEdge managed by unique_ptr
                             (*childNode).get()->AddEdgeToParentNode(edge.get());
                             /// MODIFIED - moved the edge to the parent node that will own the edge from now on
                             (*parentNode).get()->AddEdgeToChildNode(std::move(edge));
                         }
-
-                        ////
-                        //// EOF STUDENT CODE
                     }
                 }
                 else
@@ -213,9 +161,6 @@ void ChatLogic::LoadAnswerGraphFromFile(std::string filename)
         std::cout << "File could not be opened!" << std::endl;
         return;
     }
-
-    //// STUDENT CODE
-    ////
 
     // identify root node
     GraphNode *rootNode = nullptr;
@@ -245,14 +190,9 @@ void ChatLogic::LoadAnswerGraphFromFile(std::string filename)
     chatBot.SetRootNode(rootNode);
     chatBot.SetChatLogicHandle(this);
 
-    /// set the chatbot handler for this class (will be updated, 
-    /// because chatBot will be moved)
     SetChatbotHandle(&chatBot);
 
     rootNode->MoveChatbotHere(std::move(chatBot));
-
-    ////
-    //// EOF STUDENT CODE
 }
 
 void ChatLogic::SetPanelDialogHandle(ChatBotPanelDialog *panelDialog)
